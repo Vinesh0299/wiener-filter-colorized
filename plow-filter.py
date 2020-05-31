@@ -11,8 +11,16 @@ def add_gaussian_noise(img, sigma):
 	noisy_img[noisy_img > 255] = 255
 	return noisy_img
 
+# Function will return patches of default size (11,11)
+def patchify(img, patch_shape = 11):
+    return image.extract_patches_2d(img, (patch_shape, patch_shape))
+
 if __name__ == '__main__':
     filename = os.path.join(os.getcwd(), './Noisy Image/photo.jpg')
     myPhoto = io.imread(filename)
-    myPhoto = add_gaussian_noise(myPhoto, 100)
-    io.imsave('./Noisy Image/gaussian_noise.png', myPhoto)
+    # Code to create a gaussian noisy image
+    #gaussian_noise = add_gaussian_noise(myPhoto, 100)
+    #io.imsave('./Noisy Image/gaussian_noise.png', gaussian_noise)
+
+    patches = patchify(myPhoto)
+    print(patches.shape)
