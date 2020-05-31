@@ -1,6 +1,7 @@
 import os
 import numpy as np
 from skimage import io
+from skimage.transform import resize
 from sklearn.feature_extraction import image
 
 # Function will add gaussian noise to the image
@@ -16,11 +17,13 @@ def patchify(img, patch_shape = 11):
     return image.extract_patches_2d(img, (patch_shape, patch_shape))
 
 if __name__ == '__main__':
-    filename = os.path.join(os.getcwd(), './Noisy Image/photo.jpg')
+    filename = os.path.join(os.getcwd(), './Noisy Image/photo.png')
     myPhoto = io.imread(filename)
+
     # Code to create a gaussian noisy image
-    #gaussian_noise = add_gaussian_noise(myPhoto, 100)
+    #gaussian_noise = add_gaussian_noise(myPhoto, 20)
     #io.imsave('./Noisy Image/gaussian_noise.png', gaussian_noise)
 
-    patches = patchify(myPhoto)
-    print(patches.shape)
+    # Creating patches
+    #patches = patchify(myPhoto, 11)
+    #print(patches.shape)
