@@ -54,12 +54,12 @@ def wiener_filter(img, kernel, K):
 	return dummy
 
 if __name__ == '__main__':
-    filename = os.path.join(os.getcwd(), './Noisy Image/photo.png')
+    filename = os.path.join(os.getcwd(), './Noisy Image/photo.jpg')
 
     myPhoto = io.imread(filename)
 
     # Code to create a gaussian noisy image
-    gaussian_noise_image = add_gaussian_noise(myPhoto, 20)
+    gaussian_noise_image = add_gaussian_noise(myPhoto, 50)
 
     kernel = gaussian_kernel(3)
 
@@ -75,19 +75,13 @@ if __name__ == '__main__':
         blue_filtered = wiener_filter(blue_noise, kernel, K=10)
 
         filtered_image = np.dstack((red_filtered, green_filtered, blue_filtered))
-
-        red_patches = patchify(red_filtered, (11,11))
-        green_patches = patchify(green_filtered, (11,11))
-        blue_patches = patchify(blue_filtered, (11,11))
     else:
         filtered_image = wiener_filter(gaussian_noise_image, kernel, K=10)
-
-        patches = patchify(filtered_image, (11,11))
 
     # Calculating the PSNR value for the images
     print("PSNR for noisy image: {}".format(PSNR(myPhoto, gaussian_noise_image)))
     print("PSNR for filtered image: {}".format(PSNR(myPhoto, filtered_image)))
 
     # Saving the noisy and restored image
-    io.imsave('./Noisy Image/gaussian_noise.png', gaussian_noise_image)
-    io.imsave('./Restored Images/restored.png', filtered_image)
+    io.imsave('./Noisy Image/gaussian_noise.jpg', gaussian_noise_image)
+    io.imsave('./Restored Images/restored.jpg', filtered_image)
