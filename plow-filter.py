@@ -3,7 +3,6 @@ import numpy as np
 from math import log10, sqrt
 from numpy.fft import fft2, ifft2
 from skimage import io
-from skimage.transform import resize
 from scipy.signal import gaussian
 
 # Get the peek signal to noise ratio for images
@@ -84,7 +83,6 @@ if __name__ == '__main__':
         red_patches = patchify(red_filtered, (11,11))
         green_patches = patchify(green_filtered, (11,11))
         blue_patches = patchify(blue_filtered, (11,11))
-        io.imsave('./Restored Images/red_patch.png', red_patches[0][0])
     else:
         filtered_image = wiener_filter(gaussian_noise_image, kernel, K=10)
 
