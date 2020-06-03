@@ -1,9 +1,19 @@
 import os
 import numpy as np
+from math import log10, sqrt
 from numpy.fft import fft2, ifft2
 from skimage import io
 from skimage.transform import resize
 from scipy.signal import gaussian
+
+# Get the peek signal to noise ratio for images
+def PSNR(original, compressed): 
+    mse = np.mean((original - compressed) ** 2) 
+    if(mse == 0):
+        return 100
+    max_pixel = 255.0
+    psnr = 20 * log10(max_pixel / sqrt(mse)) 
+    return psnr
 
 # Function will add gaussian noise to the image
 def add_gaussian_noise(img, sigma):
@@ -58,6 +68,7 @@ if __name__ == '__main__':
 
     kernel = gaussian_kernel(3)
 
+    # Checking if image is colored or not
     if(len(gaussian_noise_image.shape) == 3):
         noisy_image = np.copy(gaussian_noise_image)
         red_noise = noisy_image[:, :, 0]
@@ -67,12 +78,20 @@ if __name__ == '__main__':
         red_filtered = wiener_filter(red_noise, kernel, K=10)
         green_filtered = wiener_filter(green_noise, kernel, K=10)
         blue_filtered = wiener_filter(blue_noise, kernel, K=10)
+
         filtered_image = np.dstack((red_filtered, green_filtered, blue_filtered))
+
+        red_patches = patchify(red_filtered, (11,11))
+        green_patches = patchify(green_filtered, (11,11))
+        blue_patches = patchify(blue_filtered, (11,11))
+        io.imsave('./Restored Images/red_patch.png', red_patches[0][0])
     else:
         filtered_image = wiener_filter(gaussian_noise_image, kernel, K=10)
 
-    io.imsave('./Restored Images/restored.png', filtered_image)
+        patches = patchify(filtered_image, (11,11))
 
-    # Creating patches
-    #patches = patchify(gaussian_noise_image, (11, 11))
-    #print(patches.shape)
+    # Calculating the PSNR value for the images
+    print("PSNR for noisy image: {}".format(PSNR(myPhoto, gaussian_noise_image)))
+    print("PSNR for filtered image: {}".format(PSNR(myPhoto, filtered_image)))
+
+    #io.imsave('./Restored Images/restored.png', filtered_image)
