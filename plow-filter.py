@@ -55,15 +55,11 @@ def wiener_filter(img, kernel, K):
 
 if __name__ == '__main__':
     filename = os.path.join(os.getcwd(), './Noisy Image/photo.png')
-    gaussian_noise_image = os.path.join(os.getcwd(), './Noisy Image/gaussian_noise.png')
 
     myPhoto = io.imread(filename)
 
     # Code to create a gaussian noisy image
-    #gaussian_noise = add_gaussian_noise(myPhoto, 20)
-    #io.imsave('./Noisy Image/gaussian_noise.png', gaussian_noise)
-
-    gaussian_noise_image = io.imread(gaussian_noise_image)
+    gaussian_noise_image = add_gaussian_noise(myPhoto, 20)
 
     kernel = gaussian_kernel(3)
 
@@ -92,4 +88,6 @@ if __name__ == '__main__':
     print("PSNR for noisy image: {}".format(PSNR(myPhoto, gaussian_noise_image)))
     print("PSNR for filtered image: {}".format(PSNR(myPhoto, filtered_image)))
 
-    #io.imsave('./Restored Images/restored.png', filtered_image)
+    # Saving the noisy and restored image
+    io.imsave('./Noisy Image/gaussian_noise.png', gaussian_noise_image)
+    io.imsave('./Restored Images/restored.png', filtered_image)
